@@ -1,0 +1,123 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS F_Brand;
+DROP TABLE IF EXISTS F_Volume;
+DROP TABLE IF EXISTS F_Price;
+DROP TABLE IF EXISTS F_Corner;
+DROP TABLE IF EXISTS F_PortFroz;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE F_Brand (
+    F_Brand_id INT(5),
+    F_Brand_name VARCHAR(20),
+  Image blob,
+    PRIMARY KEY (F_Brand_id)
+    );
+
+CREATE TABLE F_Volume (
+    F_Volume_id INT(5),
+    F_Volume_name VARCHAR(20),
+    Image blob,
+    PRIMARY KEY (F_Volume_id)
+    );
+
+CREATE TABLE F_Price (
+    F_Price_id INT(5),
+    F_Price_name VARCHAR(20),
+    Image blob,
+    PRIMARY KEY (F_Price_id)
+    );
+    
+CREATE TABLE F_Corner (
+    F_Corner_id INT(5),
+    F_Corner_name VARCHAR(5),
+    Image blob,
+    PRIMARY KEY (F_Corner_id)
+    );
+
+
+CREATE TABLE F_PortFroz (
+    F_D_name  VARCHAR(100), 
+    F_D_brand INT(5),
+    F_D_volume INT(5),
+    F_D_price INT(5),
+    F_D_corner     INT(5),
+    Image blob,
+    INDEX(F_D_name),
+         PRIMARY KEY (F_D_name),
+         FOREIGN KEY (F_D_brand) REFERENCES F_Brand (F_Brand_id),
+         FOREIGN KEY (F_D_volume) REFERENCES F_Volume (F_Volume_id),
+         FOREIGN KEY (F_D_price) REFERENCES F_Price (F_Price_id),
+         FOREIGN KEY (F_D_corner) REFERENCES F_Corner (F_Corner_id)
+       );
+
+
+INSERT INTO F_Brand (F_Brand_id, F_Brand_name)
+VALUES  (0, 'Smeg'),
+        (1, 'Brugge'), 
+        (2, 'Meyvel'), 
+        (3, 'Teslar'),
+        (4, 'Cold Vine');
+
+INSERT INTO F_Volume (F_Volume_id, F_Volume_name)
+VALUES  (0, '15л'),
+        (1, '25л'), 
+        (2, '30л'), 
+        (3, '40л'),
+        (4, '60л');
+
+INSERT INTO F_Price (F_Price_id, F_Price_name)
+VALUES  (0, '10000'),
+        (1, '20000'), 
+        (2, '30000'), 
+        (3, '40000'),
+        (4, '50000');
+
+INSERT INTO F_Corner (F_Corner_id, F_Corner_name)
+VALUES  (0, '40'),
+        (1, '50'), 
+        (2, '45'), 
+        (3, '30'),
+        (4, '60'),
+        (5, '28'),
+        (6, '44,5');
+        
+INSERT INTO F_PortFroz (F_D_name, F_D_brand, F_D_corner, F_D_price, F_D_volume, Image)
+VALUES ('Brugge K5098F53',                            1,  3, 4, 1, NULL), 
+        ('Smeg FAB10LOR5',                            0,  0, 2, 0, NULL),
+        ('Cold Vine MCA-28BG',                        4,  5, 1, 0, NULL),
+        ('Meyvel MD35-White',                         2,  3, 0, 1, NULL),
+        ('Cold Vine MCA-62B',                         4,  1, 2, 2, NULL),
+        ('Brugge F98043H5',                           1,  3, 3, 4, NULL),
+        ('Meyvel MD105-Black',                        2,  0, 1, 3, NULL),
+        ('Smeg FAB30RBL5',                            0,  0, 2, 1, NULL),
+        ('Brugge F920K646',                           1,  3, 0, 3, NULL),
+        ('Tesler RC-110 Wood',                        3,  0, 2, 0, NULL),
+        ('Cold Vine MCA-28WG',                        4,  5, 2, 4, NULL),
+        ('Cold Vine MCA-50BG',                        4,  0, 1, 2, NULL),
+        ('Tesler RC-55 Black',                        3,  2, 4, 0, NULL),
+        ('Meyvel MD71-White',                         2,  4, 2, 1, NULL),
+        ('Brugge H589647G',                           1,  4, 3, 0, NULL),
+        ('Tesler RC-95 Wood',                         3,  2, 1, 2, NULL);
+
+
+SELECT * FROM F_PortFroz;
+SELECT * FROM F_Price;
+SELECT * FROM F_Volume;
+SELECT * FROM F_Brand;
+SELECT * FROM F_Corner;
+
+SELECT F_D_name AS 'Наименование',
+       brand.F_Brand_name           AS 'Бренд',
+       volume.F_Volume_name         AS 'Объем',
+       price.F_Price_name           AS 'Цена',
+       corner.F_Corner_name         AS 'Ширина'
+FROM   F_PortFroz AS portfroz
+INNER JOIN  F_Brand      AS brand       ON 
+brand.F_Brand_id           = portfroz.F_D_brand
+INNER JOIN  F_Volume      AS volume       ON 
+volume.F_Volume_id         = portfroz.F_D_volume
+INNER JOIN  F_Price      AS price       ON 
+price.F_Price_id           = portfroz.F_D_price
+INNER JOIN  F_Corner     AS corner      ON 
+corner.F_Corner_id         = portfroz.F_D_corner
+
